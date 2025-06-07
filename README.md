@@ -15,18 +15,16 @@ This project follows the **MVVM architecture**, utilizes **Room** for local data
 - Live UI updates using **LiveData** and **Data Binding**
 - Local database using **Room**
 - Follows **MVVM (Model-View-ViewModel)** architecture
-
 ---
 ## Screenshots
 
 | Home Page | Add Contact | Contact List |
 |-----------|-------------|--------------|
-| ![Home Page](https://github.com/user-attachments/assets/fcaeb9be-6f85-4141-b3b9-96a4a70c8db9) | ![Add Contact](https://github.com/user-attachments/assets/74a0d3b5-cc10-46f7-9f08-2956c92693af) | ![Contact List](https://github.com/user-attachments/assets/a419990b-1df4-4b45-8203-7cb59e5e109c) |
+| ![Home Page](https://github.com/user-attachments/assets/6ef8477f-fc7f-4e56-957e-f44111a21a99) | ![Add Contact](https://github.com/user-attachments/assets/d4a8b75c-56c2-47d5-bb7a-4aac127bb9c0) | ![Contact List](https://github.com/user-attachments/assets/9673a6aa-2ca5-4c9d-b55e-f9e99fe0d54b) |
 
 | Edit Contact | Delete Contact | Favorite Contact |
 |--------------|----------------|------------------|
-| ![Edit Contact](https://github.com/user-attachments/assets/b52c064d-2c4d-49ff-9fc9-5cfff556cec2) | ![Delete Contact](https://github.com/user-attachments/assets/a76df05a-23ec-4c46-adc9-a18f9c225c86) | ![Favorite Contact](https://github.com/user-attachments/assets/3093540c-2cba-436d-b03a-b238653cc6e8)
- 
+| ![Edit Contact](https://github.com/user-attachments/assets/1f645418-fae5-40d4-a2e1-f2156484788b) | ![Delete Contact](https://github.com/user-attachments/assets/55a7c08a-5471-48e8-afad-24ec7e098a76) | ![Favorite Contact](https://github.com/user-attachments/assets/12125fbc-c965-446d-bfc9-ffd28e6c641c) |
 
 ---
 ## Tech Stack
