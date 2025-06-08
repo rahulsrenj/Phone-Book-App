@@ -1,13 +1,8 @@
 package com.rahulsrenj.phonebook.handlers;
 
-
-import static androidx.core.app.ActivityCompat.startActivityForResult;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.provider.MediaStore;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -15,9 +10,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.RequiresExtension;
 
-import com.rahulsrenj.phonebook.activities.AddContactsActivity;
 import com.rahulsrenj.phonebook.viewmodel.ContactsViewModel;
 import com.rahulsrenj.phonebook.activities.MainActivity;
 import com.rahulsrenj.phonebook.database.Contacts;

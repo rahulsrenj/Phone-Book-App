@@ -1,15 +1,12 @@
 package com.rahulsrenj.phonebook.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,7 +21,6 @@ import com.rahulsrenj.phonebook.database.Contacts;
 import com.rahulsrenj.phonebook.databinding.ActivityAddContactsBinding;
 
 public class AddContactsActivity extends AppCompatActivity {
-    private static final int PICK_IMAGE_REQUEST = 1;
     private Contacts contacts;
     private ActivityAddContactsBinding binding;
     private ContactsViewModel viewModel;
