@@ -10,7 +10,7 @@ This project follows the **MVVM architecture**, utilizes **Room** for local data
 
 - View all contacts or favorite contacts using **tabs with ViewPager2**
 - Add new contacts with name, number, email, and profile image
-- Load profile images using the Android Photo Picker
+- Add profile images using the Android Photo Picker
 - Mark/unmark contacts as favorites
 - Edit and delete existing contacts
 - Live UI updates using **LiveData** and **Data Binding**
