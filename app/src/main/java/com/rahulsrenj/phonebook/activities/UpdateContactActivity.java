@@ -1,9 +1,14 @@
 package com.rahulsrenj.phonebook.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -24,41 +29,43 @@ public class UpdateContactActivity extends AppCompatActivity {
     private int contact_id;
     private boolean isFavorite=false;
     private ContactsViewModel viewModel;
-    private static final int PICK_IMAGE_REQUEST = 1;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private String imageProfile;
 
     private Contacts updatedContact;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_update_contact);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_update_contact);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Intent recvIntent=getIntent();
-        contact_id=recvIntent.getIntExtra("contact_id",-1);
-        name=recvIntent.getStringExtra("contact_name");
-        num=recvIntent.getStringExtra("contact_num");
-        email=recvIntent.getStringExtra("contact_email");
-        isFavorite=recvIntent.getBooleanExtra("contact_favorite",false);
-        imageProfile=recvIntent.getStringExtra("contact_profile");
-        updatedContact=new Contacts(contact_id,name,num,email,false,imageProfile);
-        viewModel=new ViewModelProvider(this).get(ContactsViewModel.class);
-        binding.setContacts(updatedContact);
-        binding.setClickHandler(new UpdateContactClickHandlers(this,viewModel,updatedContact));
-    }
+        Intent recvIntent = getIntent();
+        contact_id = recvIntent.getIntExtra("contact_id", -1);
+        name = recvIntent.getStringExtra("contact_name");
+        num = recvIntent.getStringExtra("contact_num");
+        email = recvIntent.getStringExtra("contact_email");
+        isFavorite = recvIntent.getBooleanExtra("contact_favorite", false);
+        imageProfile = recvIntent.getStringExtra("contact_profile");
+        updatedContact = new Contacts(contact_id, name, num, email, false, imageProfile);
+        viewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
+        pickMedia=registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),uri->{
+            if(uri!=null)
+            {
+                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                getContentResolver().takePersistableUriPermission(uri, takeFlags);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== PICK_IMAGE_REQUEST && resultCode==RESULT_OK && data!=null){
-            binding.profilePic.setImageURI(data.getData());
-            updatedContact.setImageUri(String.valueOf(data.getData()));
-        }
+                binding.profilePic.setImageURI(uri);
+                updatedContact.setImageUri(String.valueOf(uri));
+            }
+        });
+        binding.setContacts(updatedContact);
+        binding.setClickHandler(new UpdateContactClickHandlers(this, viewModel, updatedContact,pickMedia));
 
     }
 }

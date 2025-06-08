@@ -8,21 +8,27 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+
+import com.rahulsrenj.phonebook.activities.AddContactsActivity;
+import com.rahulsrenj.phonebook.activities.UpdateContactActivity;
 import com.rahulsrenj.phonebook.viewmodel.ContactsViewModel;
 import com.rahulsrenj.phonebook.activities.MainActivity;
 import com.rahulsrenj.phonebook.database.Contacts;
 
 public class UpdateContactClickHandlers {
 
-    public Context context;
-    public ContactsViewModel viewModel;
-    public Contacts contacts;
-    private static final int PICK_IMAGE_REQUEST = 1;
-
-    public UpdateContactClickHandlers(Context context, ContactsViewModel viewModel, Contacts contacts) {
+    private Context context;
+    private ContactsViewModel viewModel;
+    private Contacts contacts;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    public UpdateContactClickHandlers(Context context, ContactsViewModel viewModel, Contacts contacts, ActivityResultLauncher<PickVisualMediaRequest> pickMedia) {
         this.context = context;
         this.viewModel = viewModel;
         this.contacts = contacts;
+        this.pickMedia=pickMedia;
     }
     public void onUpdateClicked(View v){
         if(contacts.getNum()==null||contacts.getName()==null)
@@ -31,20 +37,21 @@ public class UpdateContactClickHandlers {
         }
         else {
             Intent intent = new Intent(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             viewModel.updateContact(contacts);
             context.startActivity(intent);
         }
     }
     public void onDeleteClicked(View v){
         Intent intent=new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         viewModel.deleteContact(contacts);
         Toast.makeText(context, "Contact Deleted", Toast.LENGTH_SHORT).show();
         context.startActivity(intent);
     }
     public void onEditPhotoClicked(View v){
-        Intent intent=new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult((Activity) context,Intent.createChooser(intent,"Update your photo"),PICK_IMAGE_REQUEST,null);
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
 }

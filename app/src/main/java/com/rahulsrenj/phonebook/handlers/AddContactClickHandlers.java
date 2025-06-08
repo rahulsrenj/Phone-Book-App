@@ -6,10 +6,18 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresExtension;
+
+import com.rahulsrenj.phonebook.activities.AddContactsActivity;
 import com.rahulsrenj.phonebook.viewmodel.ContactsViewModel;
 import com.rahulsrenj.phonebook.activities.MainActivity;
 import com.rahulsrenj.phonebook.database.Contacts;
@@ -18,12 +26,12 @@ public class AddContactClickHandlers {
     private Context context;
     private ContactsViewModel viewModel;
     private Contacts contacts;
-    private static final int PICK_IMAGE_REQUEST = 1;
-
-    public AddContactClickHandlers(Context context, ContactsViewModel viewModel, Contacts contacts) {
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    public AddContactClickHandlers(Context context, ContactsViewModel viewModel, Contacts contacts, ActivityResultLauncher<PickVisualMediaRequest> pickMedia) {
         this.context = context;
         this.viewModel = viewModel;
         this.contacts = contacts;
+        this.pickMedia=pickMedia;
     }
     public void onSaveCliked(View view){
         Log.d("check-now",contacts.getName() + ":"+contacts.getNum());
@@ -31,17 +39,18 @@ public class AddContactClickHandlers {
             Toast.makeText(context, "Please fill the fields.", Toast.LENGTH_SHORT).show();
         }else {
             Intent intent = new Intent(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             viewModel.addContact(contacts);
             context.startActivity(intent);
         }
     }
 
-    public void onPhotoClicked(View v){
-        Intent intent=new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult((Activity) context,Intent.createChooser(intent,"Choose a picture"),PICK_IMAGE_REQUEST,null);
+    public void onPhotoClicked(View v) {
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
+
 
 
 }

@@ -3,8 +3,12 @@ package com.rahulsrenj.phonebook.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -24,6 +28,7 @@ public class AddContactsActivity extends AppCompatActivity {
     private Contacts contacts;
     private ActivityAddContactsBinding binding;
     private ContactsViewModel viewModel;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,21 +41,19 @@ public class AddContactsActivity extends AppCompatActivity {
         });
         contacts=new Contacts();
         viewModel=new ViewModelProvider(this).get(ContactsViewModel.class);
+        pickMedia=registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),uri->{
+            if(uri!=null)
+            {
+                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                binding.profilePic.setImageURI(uri);
+                contacts.setImageUri(String.valueOf(uri));
+            }
+        });
         binding.setContacts(contacts);
-        binding.setClickHandler(new AddContactClickHandlers(this,viewModel,contacts));
-
-
+        binding.setClickHandler(new AddContactClickHandlers(this,viewModel,contacts,pickMedia));
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==PICK_IMAGE_REQUEST && resultCode==RESULT_OK && data.getData()!=null){
-            Uri imageUri=data.getData();
-            binding.profilePic.setImageURI(imageUri);
-            contacts.setImageUri(String.valueOf(imageUri));
-        }
 
-    }
 }
